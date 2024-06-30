@@ -21,5 +21,9 @@
   lista_t *lista_pop( lista_t *l );
   void selection_sort(lista_t *l);
   void bubble_sort(lista_t *l);
+  lista_t *merge_sort(lista_t *);
+  void desaloca(lista_t *l);
+  lista_t *merge(lista_t *l, lista_t *parte2);
+  lista_t *divide(lista_t *l);
 
 #endif // LISTA2_H;

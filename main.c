@@ -17,7 +17,7 @@ int main( void ){
   lista_imprime(l);
   printf("\n");
   
-  bubble_sort(l);
+  merge_sort(l);
   
   lista_imprime(l);
   printf("\n");
