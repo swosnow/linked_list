@@ -12,12 +12,20 @@ int main( void ){
   l = lista_append( l, 5 );
   l = lista_append( l, 8 );
   l = lista_append( l, 1 );
-  l = lista_append( l, 7 );
+  l = lista_append( l, 10 );
+  l = lista_append( l, 2 );
+  l = lista_append( l, 11 );
+  l = lista_append( l, 50);
+  l = lista_append( l, 4 );
+   
+   
+
+
   
   lista_imprime(l);
   printf("\n");
   
-  merge_sort(l);
+  MERGE_SORT(&l);
   
   lista_imprime(l);
   printf("\n");

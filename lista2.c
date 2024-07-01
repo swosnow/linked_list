@@ -39,7 +39,7 @@ lista_t *lista_append( lista_t *l, int d ){
 void lista_imprime( lista_t *l ){
   lista_t *aux = l;
   while ( aux != NULL ){
-    printf("%d ", aux->x);
+    printf("[%d] ", aux->x);
     aux = aux->prox;
   }
 }
@@ -79,6 +79,9 @@ lista_t *lista_pop( lista_t *l ){
 }
 
 void selection_sort(lista_t *l){
+
+  if(l->prox == NULL)return;
+  
   lista_t *i = l;
   lista_t *j, *ordenado;
 
@@ -93,12 +96,12 @@ void selection_sort(lista_t *l){
       
       if(i-> x > j->x ){
          
-        *ordenado = *i ; // copia valor de i em aux.
-        *i =  *j; // copia valor de j em i.
-        i->prox = ordenado->prox; // altera ponterio do próximo de i para que ele continue sendo o mesmo que era antes da copia
-        ordenado->prox = j->prox; // copia o valor do ponteiro do proximo j
-        *j = *ordenado; // copia valor de aux em j.
-        j->prox = ordenado->prox; // altera ponterio do próximo de i para que ele continue sendo o mesmo que era antes da copia                        
+        *ordenado = *i ; 
+        *i =  *j;
+        i->prox = ordenado->prox; 
+        ordenado->prox = j->prox; 
+        *j = *ordenado; 
+        j->prox = ordenado->prox;                        
       }
       
       j = j -> prox;
@@ -107,12 +110,15 @@ void selection_sort(lista_t *l){
     i = i ->prox;
 
   }
+  free(ordenado);
 
 }
 
 
 void bubble_sort(lista_t *l)
 {
+  if(l->prox == NULL)return;
+  
   lista_t *i = l;
   lista_t *aux, *j;
   int len_lista = sizeof(l);
@@ -130,91 +136,79 @@ void bubble_sort(lista_t *l)
       if(j == NULL)break;
       
       if(i-> x > j->x ){         
-          *aux = *i ; // copia valor de i em aux.
-          *i =  *j; // copia valor de j em i.
-          i->prox = aux->prox; // altera ponterio do próximo de i para que ele continue sendo o mesmo que era antes da copia
-          aux->prox = j->prox; // copia o valor do ponteiro do proximo j
-          *j = *aux; // copia valor de aux em j.
-          j->prox = aux->prox; // altera ponterio do próximo de i para que ele continue sendo o mesmo que era antes da copia
-          printf("entrou\n");           
+          *aux = *i ; 
+          *i =  *j;
+          i->prox = aux->prox; 
+          aux->prox = j->prox; 
+          *j = *aux;
+          j->prox = aux->prox; 
+                 
       }
       i = i->prox;      
-      printf("stop\n");    
+      
     }
     swaped++;
-    printf("2\n");
+    
   }
   free(aux);
 } 
 
-lista_t *divide(lista_t *l){
-  lista_t *part1 = l;
-  lista_t *part2 = l;
-  lista_t *parte2;
- 
-  while(part1->prox != NULL && part1->prox->prox != NULL){
-    part1 = part1->prox->prox;
-    part2 = part2->prox;
-  }
-  
-  parte2 = part2->prox;
-  part2->prox = NULL;
 
-  return parte2;
+
+
+
+
+lista_t *MERGE(lista_t *esq, lista_t *dir){
+
+  lista_t* aux = NULL;
+  if (esq == NULL){
+    return (dir);
+  }else if(dir == NULL){
+    return (esq);
+  }
+  if(esq->x <= dir->x){
+    aux = esq;    
+    aux->prox = MERGE(esq->prox, dir);    
+  }else{
+    aux = dir;    
+    aux->prox = MERGE(esq, dir->prox);    
+  } 
+  return (aux);
 }
 
-void desaloca(lista_t *l){
-  lista_t *i;
-  i = l;
+ lista_t* meio( lista_t* l) {
+     lista_t* p1 = l;
+     lista_t* p2 = l;
+     lista_t* aux = NULL;
 
-  if(i != NULL){
-    desaloca(i->prox);
+    
+    while (p1 != NULL && p1->prox != NULL) {
+        p1 = p1->prox->prox;
+        aux = p2;
+        p2 = p2->prox;
+    }
+    if (aux != NULL) {
+        aux->prox = NULL; 
+    }
 
-  }
-  free(i);
+    return p2;
 }
 
-lista_t *merge_sort(lista_t *l){
-  lista_t *l2;
-  if(l->prox == NULL) return l;
-  
+void MERGE_SORT( lista_t** l) {
+    lista_t* l1 = *l;
+    lista_t* esq;
+    lista_t* dir;
 
-  
-  l2 = divide(l);
-  l = merge_sort(l);
-  l2 = merge_sort(l2);
+   
+    if (l1 == NULL || l1->prox == NULL) {
+        return;
+    }
 
-  return merge(l, l2);
-
-
-
-}
-
-lista_t *merge(lista_t *l, lista_t *parte2){
-  if (l == NULL){
-    desaloca(l);
-    return parte2;
-  }
-
-  if (parte2 == NULL){
-    desaloca(l);
-    return parte2;
-  }
-
-  if(l->x < parte2->x){
-    l->prox = merge(l->prox, parte2);
-    l->prox->ante = l;
-    l->ante = NULL;
-
-    return l;
-    desaloca(parte2);
-  }
-  else{
-    parte2->prox = merge(l, parte2->prox);
-    parte2->prox->ante = parte2;
-    parte2->ante = NULL;
-    return parte2;
-    desaloca(l);
-  }
-  
+   
+    lista_t* mid = meio(l1);
+    esq = l1;
+    dir = mid;    
+    MERGE_SORT(&esq);
+    MERGE_SORT(&dir);    
+    *l = MERGE(esq, dir);
 }
