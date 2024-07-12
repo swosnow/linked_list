@@ -153,11 +153,6 @@ void bubble_sort(lista_t *l)
   free(aux);
 } 
 
-
-
-
-
-
 lista_t *MERGE(lista_t *esq, lista_t *dir){
 
   lista_t* aux = NULL;
